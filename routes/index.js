@@ -4,6 +4,7 @@ const multer = require('multer');
 const { UserController } = require('../controllers/user-controller');
 const authenticateToken = require('../middleware/auth');
 const { PostController } = require('../controllers/post-controller');
+const CommentController = require('../controllers/comment-controller');
 
 const uploadDestination = 'uploads';
 //Показываем где хранить файлы
@@ -30,5 +31,9 @@ router.post('/posts/', authenticateToken, PostController.createPost);
 router.get('/posts/', authenticateToken, PostController.getAllPosts);
 router.get('/posts/:id', authenticateToken, PostController.getPostsById);
 router.delete('/posts/:id', authenticateToken, PostController.deletePost);
+
+// Роуты комментариев
+router.post('/comment/', authenticateToken, CommentController.CreateComment);
+router.delete('/comment/:id', authenticateToken, CommentController.DeleteComment);
 
 module.exports = router;
