@@ -24,16 +24,14 @@ const CommentController = {
   DeleteComment: async (req, res) => {
     const { id } = req.params;
     const userId = req.user.userId;
-    console.log(id);
+
     try {
       const comment = await prisma.comment.findUnique({ where: { id } });
       if (!comment) {
-        console.log('Ошибка в ненайденом комменте');
         return res.status(404).json({ error: 'Комментарий не найден' });
       }
 
       if (comment.userId !== userId) {
-        console.log('Ошибка в юзере');
         return res.status(403).json({ error: 'Нет доступа' });
       }
 
