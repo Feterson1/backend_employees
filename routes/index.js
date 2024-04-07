@@ -6,6 +6,7 @@ const authenticateToken = require('../middleware/auth');
 const { PostController } = require('../controllers/post-controller');
 const CommentController = require('../controllers/comment-controller');
 const LikeController = require('../controllers/like-controller');
+const FollowController = require('../controllers/follow-controller');
 
 const uploadDestination = 'uploads';
 //Показываем где хранить файлы
@@ -40,5 +41,7 @@ router.delete('/comment/:id', authenticateToken, CommentController.DeleteComment
 // Роуты для лайков
 router.post('/likes/', authenticateToken, LikeController.likePost);
 router.delete('/likes/:id', authenticateToken, LikeController.unlikePost);
-
+// Роуты для подписок
+router.post('/follow/', authenticateToken, FollowController.FollowUser);
+router.delete('/unfollow/:id', authenticateToken, FollowController.UnfollowUser);
 module.exports = router;
