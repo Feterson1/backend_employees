@@ -9,6 +9,7 @@ const LikeController = {
     }
     try {
       const existingLike = await prisma.like.findFirst({ where: { postId, userId } });
+
       if (existingLike) {
         return res.status(400).json({ error: 'Вы уже поставили лайк' });
       }

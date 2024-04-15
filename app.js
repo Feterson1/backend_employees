@@ -1,12 +1,13 @@
 const createError = require('http-errors');
 const express = require('express');
-
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const fs = require('fs');
+const cors = require('cors');
 require('dotenv').config();
 const app = express();
 
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -1,0 +1,19 @@
+version: '3' # версия синтаксиса
+services:
+  express-app: # Сервер Express
+    build:
+      context: .
+      dockerfile: _docker/app/Dockerfile
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: 'mongodb://feterson:cyberpunk@db:27018/mydatabase?authSource=admin&directConnection=true'
+  db: # База данных
+    image: prismagraphql/mongo-single-replica:5.0.3
+    ports:
+      - '27018:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: feterson
+      MONGO_INITDB_ROOT_PASSWORD: cyberpunk
