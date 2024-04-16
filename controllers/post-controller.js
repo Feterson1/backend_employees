@@ -1,4 +1,5 @@
 const { prisma } = require('../prisma/prisma-client');
+const { post } = require('../routes');
 
 const PostController = {
   createPost: async (req, res) => {
@@ -35,8 +36,9 @@ const PostController = {
       });
       const postWithLikeInfo = posts.map((post) => ({
         ...post,
-        lkedByUser: post.likes.some((like) => like.userId === userId),
+        likedByUser: post.likes.some((like) => like.userId === userId),
       }));
+
       res.json(postWithLikeInfo);
     } catch (error) {
       console.error('get all posts error', error);
@@ -65,7 +67,7 @@ const PostController = {
       }
       const postWithLikeInfo = {
         ...post,
-        likeByUser: post.likes.some((like) => like.userId === userId),
+        likedByUser: post.likes.some((like) => like.userId === userId),
       };
       res.json(postWithLikeInfo);
     } catch (error) {
@@ -85,7 +87,7 @@ const PostController = {
     }
     try {
       const transaction = await prisma.$transaction([
-        prisma.comment.deleteMany({ where: { id } }),
+        prisma.comment.deleteMany({ where: { postId: id } }),
         prisma.like.deleteMany({ where: { postId: id } }),
         prisma.post.delete({ where: { id } }),
       ]);

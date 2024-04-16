@@ -4,6 +4,8 @@ const LikeController = {
   likePost: async (req, res) => {
     const { postId } = req.body;
     const userId = req.user.userId;
+
+    console.log(userId);
     if (!postId) {
       return res.status(400).json({ error: 'Все поля обязательны' });
     }
@@ -27,21 +29,29 @@ const LikeController = {
   },
   unlikePost: async (req, res) => {
     const { id } = req.params;
-    const { userId } = req.user.userId;
+    const userId = req.user.userId;
+    console.log(req.user.userId);
+    console.log(userId);
     if (!id) {
       return res.status(400).json({ error: 'Вы уже поставили дизлайк' });
     }
     try {
-      const existingLike = await prisma.like.findFirst({ where: { id, userId } });
+      const existingLike = await prisma.like.findFirst({
+        where: { postId: id, userId },
+      });
 
+      console.log(existingLike.userId);
       if (!existingLike) {
         return res.status(400).json({ error: 'Нельзя поставить дизлайк' });
       }
-      //   if (like.userId !== userId) {
-      //     return res.status(403).json({ error: 'Нет доступа' });
-      //   }
+      console.log(userId, 'ds');
+      if (existingLike.userId !== userId) {
+        return res.status(403).json({ error: 'Нет доступа' });
+      }
 
-      const like = await prisma.like.deleteMany({ where: { id, userId } });
+      const like = await prisma.like.deleteMany({
+        where: { postId: id, userId },
+      });
       res.json({ like, message: 'Лайк убран' });
     } catch (error) {
       console.error('Deleted like error', error);
